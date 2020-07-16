@@ -6,8 +6,8 @@
 #include <SPI.h>
 #include <EEPROM.h>
 
-#define channelA_D 11
-#define channelA_A 9
+#define channelA_D 3
+#define channelA_A A0
 
 #define channelB_D 11
 #define channelB_A 9
@@ -130,6 +130,9 @@ void setup()
   EMDelay = EEPROM.read(1);
   rvsVoltage = EEPROM.read(2);
 
+  if(EMDelay>=255) {EMDelay = 25;}
+  if(rvsVoltage>=255) {rvsVoltage = 100;}
+
   sendID = ID | 0x100;
   filtClass = (ID & 0xF0) + 0xF;
 
@@ -163,7 +166,7 @@ void loop() {
       newLine();
       CAN.sendMsgBuf(sendID,0,0,msg);
 
-    } else if (msgBuf[0] == 0x30) //dataSend EM1
+    } else if (msgBuf[0] == 0x30) //dataSend EM1(Right)
     {
       debugPrint("0x30 dataSend: ");
       debugPrint("msg[1]: ");
@@ -189,7 +192,7 @@ void loop() {
       newLine();
       newLine();
 
-    } else if (msgBuf[0] == 0x31) //dataSend EM2
+    } else if (msgBuf[0] == 0x31) //dataSend EM2(Left)
     {
       debugPrint("0x31 dataSend: ");
       debugPrint("msg[1]: ");
