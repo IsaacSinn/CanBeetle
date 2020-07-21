@@ -1,16 +1,16 @@
 #include <mcp_can.h>
 #include <mcp_can_dfs.h>
 
-#define DEBUG_PRINT
+//#define DEBUG_PRINT
 
 #include <SPI.h>
 #include <EEPROM.h>
 
 #define channelA_D 3
-#define channelA_A A0
+#define channelA_A A2
 
 #define channelB_D 11
-#define channelB_A 9
+#define channelB_A A9
 
 const int SPI_CS_PIN = 10;
 MCP_CAN CAN(SPI_CS_PIN);
@@ -173,7 +173,7 @@ void loop() {
       debugPrintHex(msgBuf[1]);
       space();
 
-      if (msgBuf[1] == 1)
+      if (msgBuf[1] == 0x10)
       {
         EMon(true, 255);
         debugPrint(" EMon ");
@@ -198,7 +198,7 @@ void loop() {
       debugPrint("msg[1]: ");
       debugPrintHex(msgBuf[1]);
 
-      if (msgBuf[1] == 1)
+      if (msgBuf[1] == 0x10)
       {
         EMon(false, 255);
         debugPrint(" EMon ");
@@ -253,10 +253,13 @@ void loop() {
       msg[2] = A1data >> 8;
       msg[3] = A1data;
 
+      msg[4] = EMDelay;
+      msg[5] = rvsVoltage;
+
       newLine();
       newLine();
 
-      CAN.sendMsgBuf(sendID,0,4,msg);
+      CAN.sendMsgBuf(sendID,0,6,msg);
 
     } else if (msgBuf[0] == 0xCE and recID == ID) //changeID command
     {
