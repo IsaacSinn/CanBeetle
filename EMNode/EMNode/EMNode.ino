@@ -1,7 +1,7 @@
 #include <mcp_can.h>
 #include <mcp_can_dfs.h>
 
-//#define DEBUG_PRINT
+#define DEBUG_PRINT
 
 #include <SPI.h>
 #include <EEPROM.h>
@@ -166,7 +166,7 @@ void loop() {
       newLine();
       CAN.sendMsgBuf(sendID,0,0,msg);
 
-    } else if (msgBuf[0] == 0x30) //dataSend EM1(Right)
+    } else if (msgBuf[0] == 0x30) //dataSend EM1(with penetrator)
     {
       debugPrint("0x30 dataSend: ");
       debugPrint("msg[1]: ");
@@ -192,7 +192,7 @@ void loop() {
       newLine();
       newLine();
 
-    } else if (msgBuf[0] == 0x31) //dataSend EM2(Left)
+    } else if (msgBuf[0] == 0x31) //dataSend EM2(without penetrator)
     {
       debugPrint("0x31 dataSend: ");
       debugPrint("msg[1]: ");
