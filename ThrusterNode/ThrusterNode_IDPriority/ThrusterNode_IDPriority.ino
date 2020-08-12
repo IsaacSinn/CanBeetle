@@ -1,6 +1,6 @@
 #include <mcp_can.h>
 
-#define DEBUG_PRINT
+//#define DEBUG_PRINT
 
 #include <DShot.h>
 
@@ -62,14 +62,17 @@ void inline newLine()
 
 void setup() 
 {
+  #ifdef DEBUG_PRINT
   Serial.begin(115200);
+  #endif
+  
   pinMode(5, OUTPUT);
   digitalWrite(5, HIGH);
   delay(2000);
   digitalWrite(5, LOW);
 
   
-  while (CAN_OK != CAN.begin(CAN_250KBPS))
+  while (CAN_OK != CAN.begin(CAN_250KBPS, MCP_8MHz))
   {
     debugPrint("CanBeetle initialization failed!!");
     delay(100);

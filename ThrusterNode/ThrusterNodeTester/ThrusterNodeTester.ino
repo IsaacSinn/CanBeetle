@@ -5,7 +5,7 @@
 const int SPI_CS_PIN = 10;
 MCP_CAN CAN(SPI_CS_PIN);
 
-long unsigned int ID = 0xFF;
+long unsigned int ID = 0x0FF;
 long unsigned int recID;
 unsigned char msg[3] = {};
 unsigned char msgBuf[2] = {};
@@ -53,47 +53,18 @@ void loop()
   delay(500);
   
   msg[0] = dataSend;
-  msg[1] = 0x0;
+  msg[1] = 0x2000 >> 8 & 0xff;
+  msg[2] = 0x2000 & 0xff;
 
   Serial.print("0x20: ");
   Serial.print("dataSend: ");
   Serial.print("data: ");
   Serial.print("0x");
-  Serial.println(msg[1],HEX);
-  CAN.sendMsgBuf(ID,0,3,msg);
+  Serial.print(msg[1],HEX);
+  Serial.println(msg[2], HEX);
+  CAN.sendMsgBuf(ID,0,4,msg);
 
   delay(500);
-  
-  msg[0] = dataRead;
-  CAN.sendMsgBuf(ID,0,3,msg);
-
-  Serial.print("0x10: ");
-  Serial.print("dataRead: ");
-  
-  if(CAN_MSGAVAIL == CAN.checkReceive())
-  {
-    CAN.readMsgBuf(&len, msgBuf);
-    recID = CAN.getCanId();
-
-    Serial.print("A0data: ");
-    Serial.print("0x");
-    Serial.println(msgBuf[0],HEX);
-  }
-  
-  delay(500);
-
-  Serial.print("0xCE: ");
-  Serial.print("changeID: ");
-  msg[0] = changeID;
-  msg[1] = 0x011;
-  Serial.print("change to: ");
-  Serial.print("0x");
-  Serial.println(msg[1],HEX);
-  Serial.println();
-  
-
-  CAN.sendMsgBuf(ID,0,3,msg);
-  
 
 
   
