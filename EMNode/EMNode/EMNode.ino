@@ -1,7 +1,7 @@
 #include <mcp_can.h>
 #include <mcp_can_dfs.h>
 
-#define DEBUG_PRINT
+//#define DEBUG_PRINT
 
 #include <SPI.h>
 #include <EEPROM.h>
