@@ -1,3 +1,4 @@
+#include <mcp2515_can.h>
 #include <mcp_can.h>
 
 //#define DEBUG_PRINT
@@ -8,10 +9,10 @@
 
 #include <EEPROM.h>
 
-DShot Esc;
+DShot Esc(DShot::Mode::DSHOT300);
 
 const int SPI_CS_PIN = 10;
-MCP_CAN CAN(SPI_CS_PIN);
+mcp2515_can CAN(SPI_CS_PIN);
 
 unsigned char len;
 unsigned char msgBuf[8];
@@ -94,7 +95,7 @@ void setup()
   CAN.init_Filt(2, 0, ID);
 
   unsigned char msg[8];
-  CAN.sendMsgBuf(sendID,0,0,msg);
+  CAN.MCP_CAN::sendMsgBuf(sendID,0,0,msg);
   debugPrint("Connected!");
   newLine();
 
@@ -115,7 +116,7 @@ void loop() {
       debugPrintHex(sendID);
       newLine();
       newLine();
-      CAN.sendMsgBuf(sendID,0,0,msg);
+      CAN.MCP_CAN::sendMsgBuf(sendID,0,0,msg);
       
     } else if (msgBuf[0] == 0x20) //dataSend command
     {
@@ -165,7 +166,7 @@ void loop() {
       newLine();
       newLine();
    
-      CAN.sendMsgBuf(sendID,0,4,msg);
+      CAN.MCP_CAN::sendMsgBuf(sendID,0,4,msg);
       
     } else if (msgBuf[0] == 0xCE and recID == ID) //changeID command
     {
